@@ -29,9 +29,9 @@ CREATE TABLE purchaser (
 CREATE SEQUENCE purchase_order_id_seq;
 CREATE TABLE purchase_order (
 	id integer NOT NULL DEFAULT nextval('purchase_order_id_seq'),
-	item_id bigint(20) NOT NULL,
-	purchaser_id bigint(20) NOT NULL,
-	merchant_id bigint(20) NOT NULL,
+	item_id integer NOT NULL,
+	purchaser_id integer NOT NULL,
+	merchant_id integer NOT NULL,
 	purchase_count integer NOT NULL,
 	FOREIGN KEY (item_id) REFERENCES item(id),
 	FOREIGN KEY (merchant_id) REFERENCES merchant(id),
