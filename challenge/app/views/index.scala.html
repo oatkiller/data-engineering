@@ -1,7 +1,31 @@
-@(message: String)
+@(purchasers: List[Purchaser], purchaserForm: Form[String])
 
-@main("Welcome to Play 2.0") {
+@import helper._
+
+@main("Todo list") {
+	
+	<h1>@purchasers.size purchasers(s)</h1>
+	
+	<ul>
+		@purchasers.map { purchaser =>
+			<li>
+				@purchaser.name
+				
+				@form(routes.Application.deletePurchaser(purchaser.id)) {
+					<input type="submit" value="Delete" />
+				}
+			</li>
+		}
+	</ul>
     
-    @play20.welcome(message)
-    
+	<h2>Add a new purchaser</h2>
+	
+	@form(routes.Application.newPurchaser) {
+	
+		@inputText(purchaserForm("name"))
+		
+		<input type="submit" value="Create" />
+		
+	}
+	
 }
