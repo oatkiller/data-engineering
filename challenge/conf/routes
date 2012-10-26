@@ -4,11 +4,15 @@
 
 # Home page
 GET   /                  controllers.Application.index
-GET   /purchase_orders             controllers.Application.purchase_orders
+#GET   /purchase_orders             controllers.Application.purchase_orders
 POST  /purchase_orders             controllers.Application.newPurchaser
 POST  /purchase_orders/:id/delete             controllers.Application.deletePurchaser(id: Long)
 POST  /purchase_orders/upload             controllers.Application.upload
-#POST  /tasks/:id/delete  controllers.Application.deleteTask(id:  Long)
+
+#
+GET   /items             controllers.Application.items
+POST  /items             controllers.Application.newItem
+POST  /items/:id/delete  controllers.Application.deleteItem(id:  Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET   /assets/*file      controllers.Assets.at(path="/public",   file)

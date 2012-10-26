@@ -1,0 +1,42 @@
+@(items: List[Item], itemForm: Form[String])
+
+@import helper._
+
+@main("Items") {
+	
+	<h1>@items.size items(s)</h1>
+	
+	<ul>
+		@items.map { item =>
+			<li>
+				@item.description<br />
+				@item.price
+				
+				@form(routes.Application.deleteItem(item.id)) {
+					<input type="submit" value="Delete" />
+				}
+			</li>
+		}
+	</ul>
+    
+	<h2>Add a new item</h2>
+	
+	@form(routes.Application.newItem) {
+		
+		@itemForm.globalError.map { error =>
+				<p class="error">
+						@error.message
+				</p>
+		}
+            
+	
+		@inputText(itemForm("description"))
+		/*
+		inputText(itemForm("price"))
+		*/
+		
+		<input type="submit" value="Create" />
+		
+	}
+	
+}

@@ -5,6 +5,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import models.Purchaser
+import models.Item
 import play.api.libs.iteratee.{Iteratee, Input}
 import play.api.libs.iteratee.Parsing
 import play.api.libs.iteratee.Enumeratee
@@ -20,8 +21,14 @@ import play.api.libs.ws.WS
 object Application extends Controller {
   
 	def index = Action {
-		Redirect(routes.Application.purchase_orders)
+		Redirect(routes.Application.items)
 	}
+	
+	def deletePurchaser(id: Long) = TODO
+	def newPurchaser = TODO
+  def upload = TODO
+	
+	/*
 	
   def purchase_orders = Action {
 	
@@ -32,46 +39,48 @@ object Application extends Controller {
 		Ok(views.html.index(Purchaser.all(), purchaserForm))
 	}
 	
-	def deletePurchaser(id: Long) = TODO
-	def newPurchaser = TODO
-	
-	/*
-	def upload = Action(parse.multipartFormData(handleFilePartAsTemporaryFile) ) { request =>
-		request.body.file("picture").map { picture =>
-			import java.io.File
-			val filename = picture.filename 
-			val contentType = picture.contentType
-			picture.ref.moveTo(new File("/tmp/picture2"))
-			Ok("File uploaded")
-		}.getOrElse {
-			Redirect(routes.Application.index).flashing(
-				"error" -> "Missing file"
-			)
-		}
-	}
-	
-	def handleFilePartAsTemporaryFile: parse.Multipart.PartHandler[MultipartFormData.FilePart[TemporaryFile]] = {
-		parse.Multipart.handleFilePart {
-			case parse.Multipart.FileInfo(partName, filename, contentType) =>
-				val tempFile = TemporaryFile("multipartBody", "asTemporaryFile")
-				Iteratee.fold[Array[Byte], FileOutputStream](new java.io.FileOutputStream(tempFile.file)) { (os, data) =>
-					os.write(data)
-					os
-				}.mapDone { os =>
-					os.close()
-					tempFile
-				}
-		}
-	}
-	*/
-	
   def upload = Action(BodyParser(rh => new CsvIteratee(isFirst = true))) {
     request =>
       Ok("File Processed")
   }
-
+	*/
+	
+	/*
+	val itemForm = Form(
+		mapping(
+			"id" -> longNumber,
+			"price" -> longNumber,
+			"description" -> nonEmptyText
+		)(Item.apply)(Item.unapply)
+	)
+	*/
+	val itemForm = Form(
+		//"price" -> longNumber
+		"description" -> nonEmptyText
+	)
+	
+	def items = Action {
+		Ok(views.html.items(Item.all(), itemForm))
+	}
+	
+  def newItem = Action { implicit request =>
+		itemForm.bindFromRequest.fold(
+			errors => BadRequest(views.html.items(Item.all(), errors)),
+			description => {
+				println(description)
+				Item.create(description,1)
+				Redirect(routes.Application.items)
+			}
+		)
+	}
+	
+  def deleteItem(id: Long) = Action {
+		Item.delete(id)
+		Redirect(routes.Application.items)
+	}
 	
 }
+/*
 case class CsvIteratee(state: Symbol = 'Cont, input: Input[Array[Byte]] = Empty, lastChunk: String = "", isFirst: Boolean = false) extends Iteratee[Array[Byte], Either[Result, String]] {
   def fold[B](
                done: (Either[Result, String], Input[Array[Byte]]) => Promise[B],
@@ -110,4 +119,6 @@ case class CsvIteratee(state: Symbol = 'Cont, input: Input[Array[Byte]] = Empty,
   }
 
   def processLine(line: Array[String]) = println(line(1))
+	
 }
+*/
