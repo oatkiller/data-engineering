@@ -7,6 +7,7 @@ GET   /                  controllers.Application.index
 GET   /purchase_orders             controllers.Application.purchase_orders
 POST  /purchase_orders             controllers.Application.newPurchaser
 POST  /purchase_orders/:id/delete             controllers.Application.deletePurchaser(id: Long)
+POST  /purchase_orders/upload             controllers.Application.upload
 #POST  /tasks/:id/delete  controllers.Application.deleteTask(id:  Long)
 
 # Map static resources from the /public folder to the /assets URL path
